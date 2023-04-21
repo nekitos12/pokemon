@@ -96,7 +96,6 @@ function App() {
             display: "flex",
             mt: 3,
             justifyContent: "center",
-            position: "absolute",
           }}
         >
           <CircularProgress />
