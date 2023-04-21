@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Box,
   CircularProgress,
+  IconButton,
   MenuItem,
   Pagination,
   Select,
@@ -18,6 +19,7 @@ import {
 import useModal from "./hooks/useModal.ts";
 import PokemonModal from "./components/PokemonModal/PokemonModal.tsx";
 import PokemonCard from "./components/PokemonCard/PokemonCard.tsx";
+import { Clear } from "@mui/icons-material";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -29,6 +31,7 @@ function App() {
   const { isOpen, toggleIsOpen } = useModal();
   const [searchInput, setSearchInput] = useState("");
   const isFirstRender = useRef(true);
+  const handleClearClick = useCallback(() => setSearchInput(""), []);
   useEffect(() => {
     // @ts-ignore
     dispatch(fetchNextPokemon("https://pokeapi.co/api/v2/pokemon?limit=10"));
@@ -43,14 +46,20 @@ function App() {
     );
   }, [dispatch, page]);
   useEffect(() => {
-    console.log(isFirstRender);
-    if (!isFirstRender.current && searchInput) {
-      dispatch(
-        // @ts-ignore
-        fetchNextPokemon(
-          `https://pokeapi.co/api/v2/pokemon-form/${searchInput}`
-        )
-      );
+    if (!isFirstRender.current) {
+      if (searchInput) {
+        dispatch(
+          // @ts-ignore
+          fetchNextPokemon(
+            `https://pokeapi.co/api/v2/pokemon-form/${searchInput}`
+          )
+        );
+      } else {
+        dispatch(
+          // @ts-ignore
+          fetchNextPokemon("https://pokeapi.co/api/v2/pokemon?limit=10")
+        );
+      }
     }
   }, [dispatch, searchInput]);
   useEffect(() => {
@@ -61,15 +70,26 @@ function App() {
   }, [isFirstRender, pokemonsData]);
   return (
     <>
-      <Select
-        label="With normal TextField"
-        onChange={(e) => setSearchInput(e.target.value)}
-        value={searchInput}
-      >
-        {searchInputOptions?.map((name) => (
-          <MenuItem value={name}>{name}</MenuItem>
-        ))}
-      </Select>
+      <Box  width="60%" minWidth="200px" m="auto">
+        <Box m="auto" width='fit-content'>
+          <Select
+            label="With normal TextField"
+            onChange={(e) => setSearchInput(e.target.value)}
+            value={searchInput}
+            placeholder="Выберите покемона"
+            endAdornment={
+              <IconButton onClick={handleClearClick} style={{ marginRight: 10 }}>
+                <Clear />
+              </IconButton>
+            }
+          >
+            {searchInputOptions?.map((name) => (
+              <MenuItem value={name}>{name}</MenuItem>
+            ))}
+          </Select>
+        </Box>
+
+      </Box>
       {pokemonsDataIsLoading ? (
         <Box
           sx={{
