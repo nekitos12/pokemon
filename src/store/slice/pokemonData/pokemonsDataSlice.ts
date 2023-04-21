@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Article } from './types/article';
+import { createSlice } from '@reduxjs/toolkit';
 import {fetchNextPokemon} from "./services/fetchNextPokemon.ts";
 export interface Pokemon {
   [key: string]: any
@@ -31,7 +30,7 @@ export const pokemonsDataSlice = createSlice({
       })
       .addCase(fetchNextPokemon.fulfilled, (
         state,
-        action: PayloadAction<Article>,
+        action,
       ) => {
         state.isLoading = false;
         state.data = action.payload.results;

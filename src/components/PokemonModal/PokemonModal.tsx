@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useSelector } from "react-redux";
@@ -8,6 +7,7 @@ import {
 } from "../../store/slice/pokemon/selectors/pokemon.ts";
 import { useAppDispatch } from "../../store/store.ts";
 import { fetchPokemonByUrl } from "../../store/slice/pokemon/services/fetchPokemonByUrl.ts";
+import {useEffect} from "react";
 
 const style = {
   position: "absolute" as const,
@@ -34,6 +34,7 @@ export default function PokemonModal({
   const { sprites, name, stats } = useSelector(getPokemonInfo);
   const dispatch = useAppDispatch();
   useEffect(() => {
+    // @ts-ignore
     dispatch(fetchPokemonByUrl(pokemonUrl));
   }, [pokemonUrl]);
   return (
@@ -47,6 +48,7 @@ export default function PokemonModal({
             </Box>
             <Box display="flex" flexWrap="wrap" gap="10px">
               {stats &&
+                // @ts-ignore
                 stats.map(({ base_stat: baseStat, stat }) => (
                   <Box key={stat} display="flex" flexDirection="column" alignItems="center" >
                     <span>{baseStat}</span>

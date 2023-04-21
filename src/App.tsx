@@ -28,15 +28,16 @@ function App() {
   const pokemonsDataCount = useSelector(getPokemonsDataCount);
   const { isOpen, toggleIsOpen } = useModal();
   const [searchInput, setSearchInput] = useState("");
-  const s = useSelector((state) => state);
   console.log(pokemonsData);
   const isFirstRender = useRef(true);
   useEffect(() => {
+    // @ts-ignore
     dispatch(fetchNextPokemon("https://pokeapi.co/api/v2/pokemon?limit=10"));
     isFirstRender.current = false;
   }, []);
   useEffect(() => {
     dispatch(
+      // @ts-ignore
       fetchNextPokemon(
         `https://pokeapi.co/api/v2/pokemon?offset=${page * 10}&limit=10`
       )
@@ -45,8 +46,8 @@ function App() {
   useEffect(() => {
     console.log(isFirstRender);
     if (!isFirstRender.current && searchInput) {
-      console.log(searchInput);
       dispatch(
+        // @ts-ignore
         fetchNextPokemon(
           `https://pokeapi.co/api/v2/pokemon-form/${searchInput}`
         )
@@ -55,6 +56,7 @@ function App() {
   }, [dispatch, searchInput]);
   useEffect(() => {
     if (pokemonsData?.length && !searchInputOptions.length) {
+      // @ts-ignore
       setSearchInputOptions(pokemonsData.map(({ name }) => name));
     }
   }, [isFirstRender, pokemonsData]);
@@ -62,13 +64,10 @@ function App() {
     <>
       <Select
         label="With normal TextField"
-        onChange={(e) => {
-          console.log(e);
-          setSearchInput(e.target.value);
-        }}
+        onChange={(e) => setSearchInput(e.target.value)}
         value={searchInput}
       >
-        {searchInputOptions?.map(name => (
+        {searchInputOptions?.map((name) => (
           <MenuItem value={name}>{name}</MenuItem>
         ))}
       </Select>

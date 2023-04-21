@@ -1,9 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-// import { ThunkConfig } from 'app/providers/StoreProvider';
-import { Article } from "../../types/article";
 import { AxiosInstance } from "axios";
 import api from "../../../../services";
 import { StateSchema } from "../../../store.ts";
+import {Pokemon} from "../pokemonsDataSlice.ts";
 
 export interface ThunkExtraArg {
   api: AxiosInstance;
@@ -15,7 +14,7 @@ export interface ThunkConfig<T> {
   state: StateSchema;
 }
 
-const getPokemonsWithPhoto = async (pokemons) => {
+const getPokemonsWithPhoto = async (pokemons: any[]) => {
   const arrayWithPhoto = [];
   for (const pokemon of pokemons) {
     const { data } = await api.pokemon.get(pokemon.url);
@@ -24,12 +23,13 @@ const getPokemonsWithPhoto = async (pokemons) => {
   return arrayWithPhoto;
 };
 export const fetchNextPokemon = createAsyncThunk<
-  Article,
+  Pokemon,
   string,
   ThunkConfig<string>
 >("pokemonsDataSlice/fetchPokemonByUrl", async (searchString, thunkApi) => {
   const { extra, rejectWithValue } = thunkApi;
   try {
+    // @ts-ignore
     const response = await extra.api.pokemon.get(searchString);
     console.log(response);
     const arrayWithPhoto = Array.isArray(response?.data?.results)

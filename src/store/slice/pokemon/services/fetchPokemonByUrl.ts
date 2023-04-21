@@ -10,6 +10,7 @@ export const fetchPokemonByUrl = createAsyncThunk<
   const { extra, rejectWithValue } = thunkApi;
   try {
     if (searchString) {
+      // @ts-ignore
       const response = await extra.api.pokemon.get(searchString);
       if (!response.data) {
         throw new Error();
