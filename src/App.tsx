@@ -28,7 +28,6 @@ function App() {
   const pokemonsDataCount = useSelector(getPokemonsDataCount);
   const { isOpen, toggleIsOpen } = useModal();
   const [searchInput, setSearchInput] = useState("");
-  console.log(pokemonsData);
   const isFirstRender = useRef(true);
   useEffect(() => {
     // @ts-ignore
